@@ -17,9 +17,17 @@ namespace ETicaretAPI.Application.Features.Queries.Product.GetByIdProduct
 			_productReadRepository = productReadRepository;
 		}
 
-		public Task<GetByIdProductQueryResponse> Handle(GetByIdProductQueryRequest request, CancellationToken cancellationToken)
+		public async Task<GetByIdProductQueryResponse> Handle(GetByIdProductQueryRequest request, CancellationToken cancellationToken)
 		{
-			throw new NotImplementedException();
+			Domain.Entities.Product product = await _productReadRepository.GetByIdAsync(request.Id);
+			return new()
+			{
+				Description = product.Description,
+				Name = product.Name,
+				Price = product.Price,
+				Stock = product.Stock
+			};
+
 		}
 	}
 }

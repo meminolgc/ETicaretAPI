@@ -1,10 +1,8 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 
 namespace ETicaretAPI.Application
 {
@@ -13,6 +11,11 @@ namespace ETicaretAPI.Application
 		public static void AddApplicationServices(this IServiceCollection collection)
 		{
 			collection.AddMediatR(typeof(ServiceRegistration));
+
+			// FluentValidation entegrasyonu
+			collection.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+			collection.AddFluentValidationAutoValidation();
+
 		}
 	}
 }

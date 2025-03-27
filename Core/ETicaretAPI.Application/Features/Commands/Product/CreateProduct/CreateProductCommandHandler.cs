@@ -1,4 +1,5 @@
 ﻿using ETicaretAPI.Application.Repositories.Product;
+using ETicaretAPI.Domain.Entities;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -17,9 +18,23 @@ namespace ETicaretAPI.Application.Features.Commands.Product.CreateProduct
 			_productWriteRepository = productWriteRepository;
 		}
 
-		public Task<CreateProductCommandResponse> Handle(CreateProductCommandRequest request, CancellationToken cancellationToken)
+		public async Task<CreateProductCommandResponse> Handle(CreateProductCommandRequest request, CancellationToken cancellationToken)
 		{
-			throw new NotImplementedException();
+			var product = await _productWriteRepository.AddAsync(new Domain.Entities.Product
+			{
+				Name = request.Name,
+				Price = request.Price,
+				Stock = request.Stock,
+				Description = request.Description
+			});
+
+			await _productWriteRepository.SaveAsync();
+			return new CreateProductCommandResponse
+			{
+				Success = true,
+				Message = "Product created successfully.",
+				ProductId = product.Id
+			};
 		}
 	}
 }

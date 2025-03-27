@@ -1,17 +1,36 @@
-﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ETicaretAPI.Application.DTOs.Product;
+using ETicaretAPI.Application.Repositories.Product;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace ETicaretAPI.Application.Features.Queries.Product.GetAllProduct
 {
 	public class GetAllProductQueryHandler : IRequestHandler<GetAllProductQueryRequest, GetAllProductQueryResponse>
 	{
-		public Task<GetAllProductQueryResponse> Handle(GetAllProductQueryRequest request, CancellationToken cancellationToken)
+		readonly IProductReadRepository _productReadRepository;
+
+		public GetAllProductQueryHandler(IProductReadRepository productReadRepository)
 		{
-			throw new NotImplementedException();
+			_productReadRepository = productReadRepository;
+		}
+
+		public async Task<GetAllProductQueryResponse> Handle(GetAllProductQueryRequest request, CancellationToken cancellationToken)
+		{
+			var products = await _productReadRepository.GetAll().ToListAsync();
+
+			var productDtos = products.Select(p => new GetAllProductDto
+			{
+				Description = p.Description,
+				Name = p.Name,
+				Price = p.Price,
+				Stock = p.Stock
+			}).ToList();
+
+			return new()
+			{
+				Products = productDtos
+			};
+		
 		}
 	}
 }

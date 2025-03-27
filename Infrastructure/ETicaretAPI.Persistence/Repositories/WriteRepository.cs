@@ -22,17 +22,16 @@ namespace ETicaretAPI.Persistence.Repositories
 
 		public DbSet<T> Table => _context.Set<T>();
 
-		public async Task<bool> AddAsync(T entity)
+		public async Task<T> AddAsync(T entity)
 		{
 			EntityEntry<T> entityEntry = await Table.AddAsync(entity);
-			return entityEntry.State == EntityState.Added;
+			return entityEntry.Entity;
 		}
 
 		public async Task<bool> RemoveAsync(int id)
 		{
 			T model = await Table.FirstOrDefaultAsync(data => data.Id == id);
 			return Remove(model);
-			
 		}
 
 		public bool Remove(T entity)

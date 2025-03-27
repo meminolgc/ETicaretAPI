@@ -9,6 +9,7 @@ namespace ETicaretAPI.Application.Features.Commands.Product.UpdateProduct
 {
 	public class UpdateProductCommandRequest : IRequest<UpdateProductCommandResponse>
 	{
+		public int Id { get; set; }
 		public string Name { get; set; }
 		public string Description { get; set; }
 		public decimal Price { get; set; }

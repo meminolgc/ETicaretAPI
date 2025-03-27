@@ -19,9 +19,15 @@ namespace ETicaretAPI.Application.Features.Commands.Product.UpdateProduct
 			_productWriteRepository = productWriteRepository;
 		}
 
-		public Task<UpdateProductCommandResponse> Handle(UpdateProductCommandRequest request, CancellationToken cancellationToken)
+		public async Task<UpdateProductCommandResponse> Handle(UpdateProductCommandRequest request, CancellationToken cancellationToken)
 		{
-			throw new NotImplementedException();
+			Domain.Entities.Product product = await _productReadRepository.GetByIdAsync(request.Id);
+			product.Name = request.Name;
+			product.Description = request.Description;
+			product.Price = request.Price;
+			product.Stock = request.Stock;
+			await _productWriteRepository.SaveAsync();
+			return new();
 		}
 	}
 }

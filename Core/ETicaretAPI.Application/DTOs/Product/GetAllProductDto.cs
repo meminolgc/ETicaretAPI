@@ -1,13 +1,12 @@
-﻿using MediatR;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ETicaretAPI.Application.Features.Queries.Product.GetAllProduct
+namespace ETicaretAPI.Application.DTOs.Product
 {
-	public class GetAllProductQueryRequest : IRequest<GetAllProductQueryResponse>
+	public class GetAllProductDto
 	{
 		public string Name { get; set; }
 		public string Description { get; set; }

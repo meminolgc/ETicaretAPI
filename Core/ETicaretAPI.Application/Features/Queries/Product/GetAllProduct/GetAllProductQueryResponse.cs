@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ETicaretAPI.Application.DTOs.Product;
 
 namespace ETicaretAPI.Application.Features.Queries.Product.GetAllProduct
 {
 	public class GetAllProductQueryResponse
 	{
+		public List<GetAllProductDto> Products { get; set; }
 	}
 }
