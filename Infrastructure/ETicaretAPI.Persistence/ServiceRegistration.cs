@@ -1,6 +1,7 @@
 ﻿using ETicaretAPI.Application.Repositories.Customer;
 using ETicaretAPI.Application.Repositories.Order;
 using ETicaretAPI.Application.Repositories.Product;
+using ETicaretAPI.Domain.Entities.Identity;
 using ETicaretAPI.Persistence.Contexts;
 using ETicaretAPI.Persistence.Repositories.Customer;
 using ETicaretAPI.Persistence.Repositories.Order;
@@ -20,6 +21,16 @@ namespace ETicaretAPI.Persistence
 		public static void AddPersistenceServices(this IServiceCollection services)
 		{
 			services.AddDbContext<ETicaretAPIDbContext>(options => options.UseSqlServer(Configuration.ConnectionString));
+			services.AddIdentity<AppUser, AppRole>(options =>
+			{
+				options.Password.RequiredLength = 3;
+				options.Password.RequireNonAlphanumeric = false;
+				options.Password.RequireDigit = false;
+				options.Password.RequireLowercase = false;
+				options.Password.RequireUppercase = false;
+			}).AddEntityFrameworkStores<ETicaretAPIDbContext>();
+
+
 			services.AddScoped<ICustomerReadRepository, CustomerReadRepository>();
 			services.AddScoped<ICustomerWriteRepository, CustomerWriteRepository>();
 			services.AddScoped<IOrderReadRepository, OrderReadRepository>();
