@@ -15,7 +15,6 @@ namespace ETicaretAPI.Application
 			// FluentValidation entegrasyonu
 			collection.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 			collection.AddFluentValidationAutoValidation();
-
 		}
 	}
 }

@@ -35,7 +35,7 @@ namespace ETicaretAPI.Application.Features.Commands.AppUsers.LoginUser
 			SignInResult result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
 			if (result.Succeeded) //Authentication başarılı.
 			{
-				TokenDto token = _tokenHandler.CreateAccessToken(5);
+				TokenDto token = _tokenHandler.CreateAccessToken(5, user);
 				return new()
 				{
 					Token = token
