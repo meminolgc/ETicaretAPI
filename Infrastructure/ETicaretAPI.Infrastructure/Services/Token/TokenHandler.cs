@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace ETicaretAPI.Infrastructure.Services.Token
@@ -18,7 +19,7 @@ namespace ETicaretAPI.Infrastructure.Services.Token
 			_configuration = configuration;
 		}
 
-		public TokenDto CreateAccessToken(int minute, AppUser user)
+		public TokenDto CreateAccessToken(int second, AppUser user)
 		{
 			TokenDto token = new();
 
@@ -29,7 +30,7 @@ namespace ETicaretAPI.Infrastructure.Services.Token
 			SigningCredentials signingCredentials = new(securityKey, SecurityAlgorithms.HmacSha256);
 
 			//Oluşturulacak token ayarları veriliyor.
-			token.Expiration = DateTime.UtcNow.AddMinutes(minute);
+			token.Expiration = DateTime.UtcNow.AddSeconds(second);
 			JwtSecurityToken securityToken = new(
 				audience: _configuration["Token:Audience"],
 				issuer: _configuration["Token:Issuer"],
@@ -42,8 +43,17 @@ namespace ETicaretAPI.Infrastructure.Services.Token
 			//Token oluşturucu sınıfından bir örnek alıyoruz.
 			JwtSecurityTokenHandler tokenHandler = new();
 			token.AccessToken = tokenHandler.WriteToken(securityToken);
-			return token;
 
+			token.RefreshToken = CreateRefreshToken();
+			return token;
+		}
+
+		public string CreateRefreshToken()
+		{
+			byte[] number = new byte[32];
+			using RandomNumberGenerator random = RandomNumberGenerator.Create();
+			random.GetBytes(number);
+			return Convert.ToBase64String(number);
 		}
 	}
 }

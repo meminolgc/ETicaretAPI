@@ -1,4 +1,6 @@
-﻿using ETicaretAPI.Application.Repositories.Customer;
+﻿using ETicaretAPI.Application.Abstractions.Services;
+using ETicaretAPI.Application.Abstractions.Services.Authentications;
+using ETicaretAPI.Application.Repositories.Customer;
 using ETicaretAPI.Application.Repositories.Order;
 using ETicaretAPI.Application.Repositories.Product;
 using ETicaretAPI.Domain.Entities.Identity;
@@ -6,13 +8,9 @@ using ETicaretAPI.Persistence.Contexts;
 using ETicaretAPI.Persistence.Repositories.Customer;
 using ETicaretAPI.Persistence.Repositories.Order;
 using ETicaretAPI.Persistence.Repositories.Product;
+using ETicaretAPI.Persistence.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ETicaretAPI.Persistence
 {
@@ -30,13 +28,17 @@ namespace ETicaretAPI.Persistence
 				options.Password.RequireUppercase = false;
 			}).AddEntityFrameworkStores<ETicaretAPIDbContext>();
 
-
 			services.AddScoped<ICustomerReadRepository, CustomerReadRepository>();
 			services.AddScoped<ICustomerWriteRepository, CustomerWriteRepository>();
 			services.AddScoped<IOrderReadRepository, OrderReadRepository>();
 			services.AddScoped<IOrderWriteRepository, OrderWriteRepository>();
 			services.AddScoped<IProductReadRepository, ProductReadRepository>();
 			services.AddScoped<IProductWriteRepository, ProductWriteRepository>();
+
+			services.AddScoped<IUserService, UserService>();
+			services.AddScoped<IAuthService, AuthService>();
+			services.AddScoped<IInternalAuthenticationService, AuthService>();
+			services.AddScoped<IExternalAuthenticationService, AuthService>();
 		}
 	}
 }

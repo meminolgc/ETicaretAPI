@@ -1,47 +1,24 @@
-﻿using ETicaretAPI.Application.Abstractions.Token;
-using ETicaretAPI.Application.DTOs;
-using ETicaretAPI.Application.Exceptions;
-using ETicaretAPI.Domain.Entities.Identity;
+﻿using ETicaretAPI.Application.Abstractions.Services;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 
 namespace ETicaretAPI.Application.Features.Commands.AppUsers.LoginUser
 {
 	public class LoginUserCommandHandler : IRequestHandler<LoginUserCommandRequest, LoginUserCommandResponse>
 	{
-		readonly UserManager<Domain.Entities.Identity.AppUser> _userManager;
-		readonly SignInManager<Domain.Entities.Identity.AppUser> _signInManager;
-		readonly ITokenHandler _tokenHandler;
+		readonly IAuthService _authService;
 
-		public LoginUserCommandHandler(
-			UserManager<AppUser> userManager,
-			SignInManager<AppUser> signInManager,
-			ITokenHandler tokenHandler)
+		public LoginUserCommandHandler(IAuthService authService)
 		{
-			_userManager = userManager;
-			_signInManager = signInManager;
-			_tokenHandler = tokenHandler;
+			_authService = authService;
 		}
 
 		public async Task<LoginUserCommandResponse> Handle(LoginUserCommandRequest request, CancellationToken cancellationToken)
 		{
-			var user = await _userManager.FindByNameAsync(request.UserNameOrEmail);
-			if (user == null)
-				user = await _userManager.FindByEmailAsync(request.UserNameOrEmail);
-
-			if (user == null)
-				throw new NotFoundUserException();
-
-			SignInResult result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
-			if (result.Succeeded) //Authentication başarılı.
+			var token = await _authService.LoginAsync(request.UserNameOrEmail, request.Password, 15);
+			return new()
 			{
-				TokenDto token = _tokenHandler.CreateAccessToken(5, user);
-				return new()
-				{
-					Token = token
-				};
-			}
-			throw new AuthenticationErrorException();
+				Token = token
+			};
 
 		}
 	}

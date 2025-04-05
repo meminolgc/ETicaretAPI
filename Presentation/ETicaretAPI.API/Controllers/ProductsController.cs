@@ -5,7 +5,6 @@ using ETicaretAPI.Application.Features.Queries.Product.GetAllProduct;
 using ETicaretAPI.Application.Features.Queries.Product.GetByIdProduct;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ETicaretAPI.API.Controllers
@@ -56,7 +55,5 @@ namespace ETicaretAPI.API.Controllers
 			UpdateProductCommandResponse response = await _mediator.Send(updateProductCommandRequest);
 			return Ok();
 		}
-
-		
 	}
 }

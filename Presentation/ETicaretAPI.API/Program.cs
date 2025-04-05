@@ -65,7 +65,6 @@ builder.Services.AddHttpLogging(logging =>
 });
 
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -75,7 +74,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 		options.TokenValidationParameters = new()
 		{
 			ValidateAudience = true,  //Oluþturulacak token deðerini hangi originlerin/sitelerin kullanacaðýný belirler.
-			ValidateIssuer = true,	  //Oluþturulacak token deðerini kimin daðýttýðýný ifade eder.
+			ValidateIssuer = true,    //Oluþturulacak token deðerini kimin daðýttýðýný ifade eder.
 			ValidateLifetime = true,  //Oluþturulan token deðerinin süresini kontrol eden doðrulama.
 			ValidateIssuerSigningKey = true, //Üretilecek token deðerinin uygulamaya ait bir deðer olduðunu ifade eden security key verisinin doðrulanmasý.
 
@@ -83,6 +82,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 			ValidAudience = builder.Configuration["Token:Audience"],
 			ValidIssuer = builder.Configuration["Token:Issuer"],
 			IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"])),
+			LifetimeValidator = (notBefore, expires, securityToken, validationParameters) => expires != null ? expires > DateTime.UtcNow : false,
 
 			NameClaimType = ClaimTypes.Name // JWT üzerinde Name claimine karþýlýk gelen deðeri User.Identity.Name propertysinden elde edebiliriz.
 

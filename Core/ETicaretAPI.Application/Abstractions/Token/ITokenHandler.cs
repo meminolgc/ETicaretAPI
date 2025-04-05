@@ -5,6 +5,7 @@ namespace ETicaretAPI.Application.Abstractions.Token
 {
 	public interface ITokenHandler
 	{
-		TokenDto CreateAccessToken(int minute, AppUser appUser);
+		TokenDto CreateAccessToken(int second, AppUser appUser);
+		string CreateRefreshToken();
 	}
 }
